@@ -1,0 +1,6 @@
+.DS_Store
+.idea/
+.ipynb_checkpoints/
+Dataset/
+Training Dataset.zip
+__pycache__/
