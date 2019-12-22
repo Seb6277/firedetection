@@ -2,5 +2,7 @@
 .idea/
 .ipynb_checkpoints/
 Dataset/
+Test_Dataset/
+runs/
 Training Dataset.zip
 __pycache__/
