@@ -3,6 +3,8 @@
 .ipynb_checkpoints/
 Dataset/
 Test_Dataset/
+training_dataset/
+testing_dataset/
 runs/
 Training Dataset.zip
 __pycache__/
