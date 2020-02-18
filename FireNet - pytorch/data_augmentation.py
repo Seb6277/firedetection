@@ -73,19 +73,19 @@ def symmetry():
                 pass
 
 
-def progress_custom(current, total, width=80):
-    print("Downloading: %d%% [%d / %d] bytes" % (current/total*100, current, total))
+def bar_custom(current, total, width=80):
+    print("Downloading: %d%% [%d / %d] bytes" % (current / total * 100, current, total))
 
 
 def download_dataset():
     print("DOWNLOADING TRAINING DATASET\n")
     dataset_name = "Dataset.zip"
     url = "https://firenetdataset.s3-us-west-2.amazonaws.com/"
-    wget.download(url + dataset_name, "./" + dataset_name, bar=progress_custom)
+    wget.download(url + dataset_name, "./" + dataset_name, bar=bar_custom)
 
     print("DOWNLOADING TEST DATASET")
     dataset_name = "Test_Dataset.zip"
-    wget.download(url + dataset_name, "./" + dataset_name, bar=progress_custom)
+    wget.download(url + dataset_name, "./" + dataset_name, bar=bar_custom)
 
 
 def inflate_dataset():
