@@ -1,6 +1,8 @@
 import os
 import cv2
+import wget
 from tqdm import tqdm
+from zipfile import ZipFile
 
 CATEGORY = ["Fire", "NoFire"]
 
@@ -71,6 +73,38 @@ def symmetry():
                 pass
 
 
+def progress_custom(current, total, width=80):
+    print("Downloading: %d%% [%d / %d] bytes" % (current/total*100, current, total))
+
+
+def download_dataset():
+    print("DOWNLOADING TRAINING DATASET\n")
+    dataset_name = "Dataset.zip"
+    url = "https://firenetdataset.s3-us-west-2.amazonaws.com/"
+    wget.download(url + dataset_name, "./" + dataset_name, bar=progress_custom)
+
+    print("DOWNLOADING TEST DATASET")
+    dataset_name = "Test_Dataset.zip"
+    wget.download(url + dataset_name, "./" + dataset_name, bar=progress_custom)
+
+
+def inflate_dataset():
+    print("UNCOMPRESS TRAINING DATASET")
+    with ZipFile("./Dataset.zip", "r") as zipObj:
+        tqdm(zipObj.extractall())
+    print("UNCOMPRESS TEST DATASET")
+    with ZipFile("./Test_Dataset.zip", "r") as zipObj:
+        tqdm(zipObj.extractall())
+
+
 def augment_data():
     blur_dataset()
     symmetry()
+
+
+def prepare_dataset():
+    download_dataset()
+    inflate_dataset()
+    resize_training_set()
+    resize_test_set()
+    augment_data()
