@@ -5,11 +5,12 @@ from model import FireNet
 from torchvision import transforms
 
 cap = cv2.VideoCapture("./fire_flames_heat_red_hot_bonfire_1062.mp4")
-# cap = cv2.VideoCapture(0)
+#cap = cv2.VideoCapture(0)
 
 net = FireNet()
 net.float()
 net.load_state_dict(torch.load('./trained_weights100.pth'))
+net.eval()
 
 while cap.isOpened():
 
@@ -26,9 +27,9 @@ while cap.isOpened():
         image = transform(image)
         image = image.unsqueeze(0)
         output = net(image.float())
-        _, predicted = torch.max(output.data, 1)
-        print(predicted)
-        cv2.putText(frame, str(predicted[0].item()), (20, 40), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
+        predicted = torch.nn.functional.softmax(output)
+        prob = predicted[0][0].item()*100.0
+        cv2.putText(frame, "Fire: " + str(prob) + "%", (20, 40), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
 
     cv2.imshow('real time', frame)
 
