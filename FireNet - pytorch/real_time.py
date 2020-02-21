@@ -4,12 +4,12 @@ import torch
 from model import FireNet
 from torchvision import transforms
 
-cap = cv2.VideoCapture("./fire_flames_heat_red_hot_bonfire_1062.mp4")
+cap = cv2.VideoCapture("./videos/fire_flames_heat_red_hot_bonfire_1062.mp4")
 #cap = cv2.VideoCapture(0)
 
 net = FireNet()
 net.float()
-net.load_state_dict(torch.load('./trained_weights100.pth'))
+net.load_state_dict(torch.load('./trained_weights100.pth', map_location=torch.device('cpu')))
 net.eval()
 
 while cap.isOpened():
@@ -29,11 +29,11 @@ while cap.isOpened():
         output = net(image.float())
         predicted = torch.nn.functional.softmax(output)
         prob = predicted[0][0].item()*100.0
-        cv2.putText(frame, "Fire: " + str(prob) + "%", (20, 40), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
+        cv2.putText(frame, "Fire prob: %.3f" % prob, (20, 40), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
 
     cv2.imshow('real time', frame)
 
-    if cv2.waitKey(1) == ord('q'):
+    if cv2.waitKey(25) == ord('q'):
         break
 
 cv2.destroyAllWindows()
